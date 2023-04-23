@@ -87,7 +87,10 @@ public class UserServiceImpl {
                     totalEarning = totalEarning + e.getEarningsAmount();
                 }
             }
-            dasboardDTO.setEarnings(earnings);
+            List<Earnings> sortedEarnings = earnings.stream()
+                    .sorted(Comparator.comparing(Earnings::getEarningsDate).reversed())
+                    .collect(Collectors.toList());
+            dasboardDTO.setEarnings(sortedEarnings);
 
             // TODO : get Expense details
             List<Expense> expenses = expenseRepository.findByUsersIdAndExpenseDateRange(user.getUserId(), startOftheMonthDate);
@@ -112,7 +115,10 @@ public class UserServiceImpl {
                     }
                 }
             }
-            dasboardDTO.setExpenses(expenseDTOS);
+            List<ExpenseDTO> sortedExpenses = expenseDTOS.stream()
+                    .sorted(Comparator.comparing(ExpenseDTO::getExpenseDate).reversed())
+                    .collect(Collectors.toList());
+            dasboardDTO.setExpenses(sortedExpenses);
 
             // TODO : get Budget details
             List<Budget> budgets = budgetRepository.findByUsers(user);
@@ -169,7 +175,10 @@ public class UserServiceImpl {
 
                 }
             }
-            dasboardDTO.setGoals(goalsDTOS);
+            List<GoalsDTO> sortedGoals = goalsDTOS.stream()
+                    .sorted(Comparator.comparing(GoalsDTO::getTargetDate).reversed())
+                    .collect(Collectors.toList());
+            dasboardDTO.setGoals(sortedGoals);
 
             dasboardDTO.setRemainingBalance(totalEarning-totalExpenses);
             log.info("Dashboard API Success");
@@ -403,7 +412,7 @@ public class UserServiceImpl {
                 return new ResponseEntity<>("{\"Goal is successfully deleted\":true}", HttpStatus.OK);
             }else{
                 log.info("No goals found for provided user and goalName");
-                return new ResponseEntity<>("No goals found for provided user and goalName", HttpStatus.OK);
+                return new ResponseEntity<>("No goals found for provided user and goalName"+goalName, HttpStatus.OK);
             }
         }else {
             log.info("User not found");
