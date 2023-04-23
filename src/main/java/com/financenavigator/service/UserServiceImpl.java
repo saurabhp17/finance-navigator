@@ -355,7 +355,7 @@ public class UserServiceImpl {
                 goal.setCreatedDate(LocalDate.now());
                 goal.setTargetDate(targetDate);
                 goalsRepository.save(goal);
-                return new ResponseEntity<>("Goal is successfully created for user", HttpStatus.OK);
+                return new ResponseEntity<>("{\"Goal is successfully created for user\":true}", HttpStatus.OK);
             }else{
                 log.info("Goals for user and provided goal name already exists. Please modify existing goal or create goal with other name");
                 return new ResponseEntity<>("Goals for user and provided goal name already exists. Please modify existing goal or create goal with other name", HttpStatus.OK);
@@ -400,7 +400,7 @@ public class UserServiceImpl {
                 Goals goal = allGoals.get(0);
                 goalsRepository.delete(goal);
                 log.info("Goal is successfully deleted");
-                return new ResponseEntity<>("Goal is successfully deleted", HttpStatus.OK);
+                return new ResponseEntity<>("{\"Goal is successfully deleted\":true}", HttpStatus.OK);
             }else{
                 log.info("No goals found for provided user and goalName");
                 return new ResponseEntity<>("No goals found for provided user and goalName", HttpStatus.OK);
